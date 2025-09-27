@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Academy - Financial Literacy Videos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header h1 {
+            font-family: monospace,sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .header h3 {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .videos-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .video-row {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .video-row.four-videos {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .video-row.two-videos {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            max-width: 900px;
+            margin: 0 auto 40px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: #f0f0f0;
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-content {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #222;
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .play-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 12px solid white;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            margin-left: 2px;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 5;
+        }
+
+        /* Color accents for category badges only */
+        .category-badge.basics { background: #3B82F6; }
+        .category-badge.saving { background: #10B981; }
+        .category-badge.history { background: #8B5CF6; }
+        .category-badge.moral { background: #F59E0B; }
+        .category-badge.short-film { background: #EF4444; }
+        .category-badge.math { background: #6366F1; }
+        .category-badge.comprehensive { background: #8B5CF6; }
+        .category-badge.education { background: #06B6D4; }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header h3 {
+                font-size: 1rem;
+            }
+            
+            .video-row.four-videos,
+            .video-row.two-videos {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-wrapper {
+                height: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .video-content {
+                padding: 15px;
+            }
+            
+            .video-wrapper {
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Money Academy</h1>
+        <h3>Learn how to manage money effectively through these educational videos. Build financial literacy skills with practical lessons.</h3>
+    </div>
+
+    <div class="videos-container">
+        <!-- First Row - 4 Videos -->
+        <div class="video-row four-videos">
+            <!-- Video 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/aRcXutXvfmM/maxresdefault.jpg" alt="Financial Literacy—Needs and Wants" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'aRcXutXvfmM')"></div>
+                    <div class="category-badge basics">Basics</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Financial Literacy—Needs and Wants</h4>
+                    <p class="video-description">Learn about the difference between needs and wants, and understand opportunity costs. This video teaches essential money management concepts for kids.</p>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/oqgtFqd8nHo/maxresdefault.jpg" alt="Elmo's Spend, Share, and Save Jars" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'oqgtFqd8nHo')"></div>
+                    <div class="category-badge saving">Saving</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Elmo's Spend, Share, and Save Jars</h4>
+                    <p class="video-description">Join Elmo as he learns about dividing money into spending, sharing, and saving jars. A fun introduction to budgeting for young children.</p>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/GZ7y-yFdX9M/maxresdefault.jpg" alt="Who Invented Money?" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'GZ7y-yFdX9M')"></div>
+                    <div class="category-badge history">History</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Who Invented Money? | The History of Money</h4>
+                    <p class="video-description">Explore the fascinating history of money from the barter system to modern currency. Dr. Binocs explains how money evolved over time.</p>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/Q4RMpXGx1FY/maxresdefault.jpg" alt="Gattu's Pocket Money" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'Q4RMpXGx1FY')"></div>
+                    <div class="category-badge moral">Moral Story</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Gattu's Pocket Money</h4>
+                    <p class="video-description">Follow Gattu's journey as he learns valuable lessons about managing pocket money responsibly in this engaging animated story.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row - 4 Videos -->
+        <div class="video-row four-videos">
+            <!-- Video 5 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/B3njsO5ewA8/maxresdefault.jpg" alt="Saving Money for Kids" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'B3njsO5ewA8')"></div>
+                    <div class="category-badge saving">Saving</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Saving Money for Kids</h4>
+                    <p class="video-description">A comprehensive guide teaching children the importance of saving money and practical ways to develop good saving habits early in life.</p>
+                </div>
+            </div>
+
+            <!-- Video 6 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/5L4DQfVIcdg/maxresdefault.jpg" alt="Coin-operated Short Film" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, '5L4DQfVIcdg')"></div>
+                    <div class="category-badge short-film">Short Film</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Coin-operated Short Film</h4>
+                    <p class="video-description">An animated short film about a young boy's determination to save money for his dream. A heartwarming story about perseverance and saving.</p>
+                </div>
+            </div>
+
+            <!-- Video 7 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/djwclHApLFo/maxresdefault.jpg" alt="Money & Making Change" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'djwclHApLFo')"></div>
+                    <div class="category-badge math">Math Skills</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Money & Making Change</h4>
+                    <p class="video-description">Learn practical math skills related to money, including how to count coins, make change, and understand the value of different denominations.</p>
+                </div>
+            </div>
+
+            <!-- Video 8 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/_M5X18-ePVc/maxresdefault.jpg" alt="Gullak Short Film" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, '_M5X18-ePVc')"></div>
+                    <div class="category-badge short-film">Short Film</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Gullak Short Film by Jugnu Kids</h4>
+                    <p class="video-description">A charming Indian animated short film about a piggy bank (gullak) that teaches children about the joy and importance of saving money.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Row - 2 Videos -->
+        <div class="video-row two-videos">
+            <!-- Video 9 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/0iRbD5rM5qc/maxresdefault.jpg" alt="Financial Literacy for Kids" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, '0iRbD5rM5qc')"></div>
+                    <div class="category-badge comprehensive">Comprehensive</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Financial Literacy for Kids ONE</h4>
+                    <p class="video-description">An Indian animated short film that covers essential financial literacy concepts in an engaging and easy-to-understand format for children.</p>
+                </div>
+            </div>
+
+            <!-- Video 10 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <img src="https://img.youtube.com/vi/RqgT14-yl74/maxresdefault.jpg" alt="Additional Financial Education" class="video-thumbnail">
+                    <div class="play-button" onclick="playVideo(this, 'RqgT14-yl74')"></div>
+                    <div class="category-badge education">Education</div>
+                </div>
+                <div class="video-content">
+                    <h4 class="video-title">Additional Financial Education</h4>
+                    <p class="video-description">More valuable lessons about money management, saving strategies, and financial responsibility for young learners.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playVideo(button, videoId) {
+            const wrapper = button.parentElement;
+            const iframe = document.createElement('iframe');
+            iframe.className = 'video-iframe';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            
+            // Replace the thumbnail with the iframe
+            wrapper.innerHTML = '';
+            wrapper.appendChild(iframe);
+            
+            // Add category badge back
+            const categoryBadge = document.createElement('div');
+            categoryBadge.className = 'category-badge ' + button.nextElementSibling.className.split(' ')[1];
+            categoryBadge.textContent = button.nextElementSibling ? button.nextElementSibling.textContent : 'Video';
+            wrapper.appendChild(categoryBadge);
+        }
+
+        // Add loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoCards = document.querySelectorAll('.video-card');
+            videoCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>

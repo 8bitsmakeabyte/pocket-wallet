@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collect Coins - Pocket Wallet</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: monospace,sans-serif;
+            color: #000000;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .balance-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8aea67;;
+            color: #000000;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid #333;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chores-section {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collection-section {
+            background: #111;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            color: #0b0808;
+            font-weight: 600;
+        }
+
+        .chore-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1f;
+            margin: 12px 0;
+            padding: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            border: 1px solid #2a2a2f;
+            overflow: hidden;
+        }
+
+        .chore-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+        }
+
+        .chore-item:nth-child(2)::before { background: #8B5CF6; }
+        .chore-item:nth-child(3)::before { background: #3B82F6; }
+        .chore-item:nth-child(4)::before { background: #10B981; }
+        .chore-item:nth-child(5)::before { background: #F59E0B; }
+        .chore-item:nth-child(6)::before { background: #EF4444; }
+
+        .chore-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border-color: #444;
+        }
+
+        .chore-item.completed {
+            background: #090f0b;
+            border-color: #10B981;
+            transform: scale(0.98);
+        }
+
+        .chore-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .chore-amount {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #F59E0B;
+        }
+
+        .completed .chore-amount {
+            color: #10B981;
+        }
+
+        .total-display {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .total-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #10B981;
+            margin: 15px 0;
+        }
+
+        .request-button {
+            background: #fefefe;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 16px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .request-button:hover:not(:disabled) {
+            background: #333;
+            border-color: #10B981;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .request-button:disabled {
+            background: #1a1a1a;
+            color: #666;
+            cursor: not-allowed;
+            border-color: #333;
+        }
+
+        .request-button:not(:disabled) {
+            background: #10B981;
+            color: #fff;
+            border-color: #10B981;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1f;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            border: 1px solid #333;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .celebration.show {
+            display: block;
+            animation: celebrationPop 0.4s ease-out;
+        }
+
+        @keyframes celebrationPop {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .celebration h2 {
+            color: #10B981;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .celebration p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .close-celebration {
+            background: #222;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .close-celebration:hover {
+            background: #333;
+            border-color: #10B981;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: #10B981;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .balance-display {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+                display: inline-block;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .chore-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="balance-display">
+        Current Balance: ₹<span id="currentBalance">250</span>
+    </div>
+
+    <div class="header">
+        <h1>Collect Coins</h1>
+        <p>Complete chores to earn money</p>
+    </div>
+
+    <div class="container">
+        <div class="chores-section">
+            <h2 class="section-title">Available Chores</h2>
+            
+            <div class="chore-item" data-amount="25">
+                <span class="chore-text">1. Fold clothes</span>
+                <span class="chore-amount">+₹25</span>
+            </div>
+            
+            <div class="chore-item" data-amount="50">
+                <span class="chore-text">2. Help with Dishes</span>
+                <span class="chore-amount">+₹50</span>
+            </div>
+            
+            <div class="chore-item" data-amount="75">
+                <span class="chore-text">3. Complete Homework</span>
+                <span class="chore-amount">+₹75</span>
+            </div>
+            
+            <div class="chore-item" data-amount="30">
+                <span class="chore-text">4. Mow the Lawn</span>
+                <span class="chore-amount">+₹30</span>
+            </div>
+            
+            <div class="chore-item" data-amount="45">
+                <span class="chore-text">5. Clean your room</span>
+                <span class="chore-amount">+₹45</span>
+            </div>
+        </div>
+
+        <div class="collection-section">
+            <h2 class="section-title">Earnings Tracker</h2>
+            
+            <div class="total-display">
+                <p style="font-size: 1rem; color: #aaa;">Chores Completed Today:</p>
+                <div class="total-amount">₹<span id="totalAmount">0</span></div>
+                <p style="color: #aaa;"><span id="completedCount">0</span> out of 5 chores done</p>
+            </div>
+            
+            <div class="progress-indicator">
+                <div class="progress-dot" id="dot1"></div>
+                <div class="progress-dot" id="dot2"></div>
+                <div class="progress-dot" id="dot3"></div>
+                <div class="progress-dot" id="dot4"></div>
+                <div class="progress-dot" id="dot5"></div>
+            </div>
+            
+            <button class="request-button" id="requestButton" disabled>
+                Request Coins from Parents
+            </button>
+            
+            <div style="margin-top: 20px; text-align: center; font-size: 0.85rem; color: #666; position: relative; z-index: 2;">
+                <p>Complete chores to unlock the request button</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        <h2>Great Job!</h2>
+        <p>You've earned <span id="celebrationAmount"></span>!</p>
+        <p>Your parents will be proud!</p>
+        <button class="close-celebration" onclick="closeCelebration()">Awesome!</button>
+    </div>
+
+    <script>
+        let totalEarnings = 0;
+        let completedChores = 0;
+        let currentBalance = 250;
+
+        const choreItems = document.querySelectorAll('.chore-item');
+        const totalAmountSpan = document.getElementById('totalAmount');
+        const completedCountSpan = document.getElementById('completedCount');
+        const requestButton = document.getElementById('requestButton');
+        const celebration = document.getElementById('celebration');
+        const celebrationAmount = document.getElementById('celebrationAmount');
+        const currentBalanceSpan = document.getElementById('currentBalance');
+        const progressDots = [
+            document.getElementById('dot1'),
+            document.getElementById('dot2'),
+            document.getElementById('dot3'),
+            document.getElementById('dot4'),
+            document.getElementById('dot5')
+        ];
+
+        choreItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (!item.classList.contains('completed')) {
+                    const amount = parseInt(item.dataset.amount);
+                    
+                    item.classList.add('completed');
+                    item.innerHTML = `
+                        <span class="chore-text">${item.querySelector('.chore-text').textContent}</span>
+                        <span class="chore-amount">+₹${amount}</span>
+                    `;
+                    
+                    totalEarnings += amount;
+                    completedChores++;
+                    
+                    updateDisplay();
+                    
+                    if (completedChores > 0) {
+                        requestButton.disabled = false;
+                    }
+                }
+            });
+        });
+
+        requestButton.addEventListener('click', () => {
+            if (totalEarnings > 0) {
+                celebrationAmount.textContent = `₹${totalEarnings}`;
+                celebration.classList.add('show');
+                
+                // Add to current balance
+                currentBalance += totalEarnings;
+                currentBalanceSpan.textContent = currentBalance;
+                
+                // Reset for next session
+                totalEarnings = 0;
+                completedChores = 0;
+                updateDisplay();
+                requestButton.disabled = true;
+                
+                // Reset chore items
+                choreItems.forEach((item, index) => {
+                    item.classList.remove('completed');
+                    const choreTexts = [
+                        '1. Fold clothes',
+                        '2. Help with Dishes', 
+                        '3. Complete Homework',
+                        '4. Mow the Lawn',
+                        '5. Clean your room'
+                    ];
+                    const amounts = [25, 50, 75, 30, 45];
+                    item.innerHTML = `
+                        <span class="chore-text">${choreTexts[index]}</span>
+                        <span class="chore-amount">+₹${amounts[index]}</span>
+                    `;
+                });
+            }
+        });
+
+        function updateDisplay() {
+            totalAmountSpan.textContent = totalEarnings;
+            completedCountSpan.textContent = completedChores;
+            
+            // Update progress dots
+            progressDots.forEach((dot, index) => {
+                if (index < completedChores) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function closeCelebration() {
+            celebration.classList.remove('show');
+        }
+
+        // Close celebration when clicking outside
+        celebration.addEventListener('click', (e) => {
+            if (e.target === celebration) {
+                closeCelebration();
+            }
+        });
+    </script>
+</body>
+</html>

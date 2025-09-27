@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocket Wallet - Learn Money Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.71/build/spline-viewer.js"></script>
+</head>
+<body>
+    <!-- Title -->
+    <h1 class="main-title">POCKET WALLET</h1>
+    
+    <!-- Game Menu -->
+    <div class="game-menu">
+        <div class="menu-header">GAME OPTIONS</div>
+
+        <a href="about-pw.html"><div class="menu-item" data-page="about">
+            <span class="menu-text">ABOUT POCKET WALLET</span>
+        </div></a>
+        
+        <a href="coin-request.html"><div class="menu-item" data-page="collect">
+            <span class="menu-text">COIN QUEST</span>
+        </div></a>
+        
+        <a href="dream-vault.html"><div class="menu-item" data-page="goals">
+            <span class="menu-text">DREAM VAULT</span>
+        </div></a>
+        
+        <a href="money-academy.html"><div class="menu-item" data-page="learning">
+            <span class="menu-text">MONEY ACADEMY</span>
+        </div></a>
+    </div>
+
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+        <button class="sound-toggle" id="soundToggle">
+            <span class="sound-icon">🔊</span>
+        </button>
+    </div>
+
+    <!-- Spline Scene -->
+    <div class="spline-container">
+        <spline-viewer url="https://prod.spline.design/FbsKcXFdCg0eLCde/scene.splinecode"></spline-viewer>
+    </div>
+    <!-- Music Player Controls -->
+<div class="music-player">
+    <button id="prevTrack" class="music-btn">⏮</button>
+    <button id="playPause" class="music-btn">▶</button>
+    <button id="nextTrack" class="music-btn">⏭</button>
+    <span id="trackInfo" class="track-info">Loading...</span>
+</div>
+
+
+<!-- Ball Instructions -->
+<div class="ball-guide">
+    <div class="guide-text top">
+        <i class="fas fa-hand-pointer guide-icon"></i>
+        Long press to change color
+    </div>
+    <div class="guide-text bottom">
+        <i class="fas fa-arrows-alt guide-icon"></i>
+        Drag and move to interact with the ball!
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

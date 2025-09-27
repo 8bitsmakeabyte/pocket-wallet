@@ -1,0 +1,396 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite:wght@400&display=swap');
+
+@font-face {
+    font-family: 'PaintingFont';
+    src: url(fonts/Paintling.ttf);
+}
+
+@font-face {
+    font-family: 'PaintBall';
+    src: url(fonts/Paintball.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Special Elite', monospace;
+    background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Title */
+.main-title {
+    font-family: 'PaintingFont', 'Serif', Arial, sans-serif;
+    font-size: 72px;
+    z-index:1;
+    color: #333;
+    font-weight: bold;
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+}
+
+/* Game Menu */
+.game-menu {
+    position: absolute;
+    top: 15%;
+    left: 2rem;
+    z-index: 10;
+    width: 200px;
+}
+
+.menu-header {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.menu-item {
+    background: rgba(128, 128, 128, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-item:hover {
+    background: rgba(128, 128, 128, 0.25);
+    border-color: rgba(128, 128, 128, 0.4);
+    transform: translateX(5px) scale(1.02);
+    box-shadow: 0 0 20px rgba(128, 128, 128, 0.3), 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.menu-item:hover::before {
+    left: 100%;
+}
+
+.menu-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Audio Controls */
+.audio-controls {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 10;
+}
+
+.sound-toggle {
+    background: rgba(128, 128, 128, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.sound-toggle:hover {
+    background: rgba(128, 128, 128, 0.25);
+    border-color: rgba(128, 128, 128, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.sound-toggle.muted .sound-icon {
+    opacity: 0.5;
+}
+
+.sound-toggle.muted .sound-icon::after {
+    content: '🔇';
+    position: absolute;
+}
+
+.sound-toggle.muted .sound-icon {
+    visibility: hidden;
+}
+
+/* Spline Scene */
+.spline-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    transform:scale(1.2);
+}
+
+spline-viewer {
+    width: 100%;
+    height: 100vh;
+}
+
+/* Focus styles for accessibility */
+.menu-item:focus {
+    outline: 2px solid rgba(128, 128, 128, 0.5);
+    outline-offset: 2px;
+    background: rgba(128, 128, 128, 0.2);
+}
+
+.sound-toggle:focus {
+    outline: 2px solid rgba(128, 128, 128, 0.5);
+    outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+    
+    .game-menu {
+        width: 180px;
+    }
+    
+    .menu-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+        top: 1rem;
+    }
+    
+    .game-menu {
+        top: 10%;
+        left: 1rem;
+        width: 160px;
+    }
+    
+    .menu-item {
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .menu-text {
+        font-size: 0.75rem;
+    }
+    
+    .audio-controls {
+        top: 1rem;
+        right: 1rem;
+    }
+    
+    .sound-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* Menu Item Animations */
+.menu-item:nth-child(2) {
+    animation: slideInLeft 0.6s ease-out 0.2s both;
+}
+
+.menu-item:nth-child(3) {
+    animation: slideInLeft 0.6s ease-out 0.4s both;
+}
+
+.menu-item:nth-child(4) {
+    animation: slideInLeft 0.6s ease-out 0.6s both;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Sound button pulse animation when music is playing */
+.sound-toggle.playing {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(128, 128, 128, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(128, 128, 128, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(128, 128, 128, 0);
+    }
+}
+
+/* Modal animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { 
+        transform: translateY(50px) scale(0.9); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateY(0) scale(1); 
+        opacity: 1; 
+    }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+/* Music Player */
+.music-player {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 20;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Special Elite', monospace;
+}
+
+.music-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.music-btn:hover {
+    transform: scale(1.2);
+}
+
+.track-info {
+    font-size: 0.9rem;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ball Guide */
+.ball-guide {
+    position: absolute;
+    right: 15%;
+    top: 40%;
+    text-align: center;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.85rem;
+    color: #333;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.guide-text {
+    margin: 1rem 0;
+    color:#000000;
+    
+}
+
+.guide-arrow {
+    font-size: 1.5rem;
+    animation: bounceArrow 1.5s infinite;
+}
+
+.top-arrow {
+    transform: rotate(-45deg);
+}
+
+.bottom-arrow {
+    transform: rotate(45deg);
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+@keyframes bounceArrow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+.ball-guide {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    color: #444;
+}
+
+.guide-text {
+    font-size: 14px;
+    margin: 6px 0;
+    color:#000000;
+}
+
+.guide-icon {
+    font-size: 20px;
+    color: #666;
+    margin: 5px 0;
+    animation: bounce 1.2s infinite alternate;
+}
+
+.top-arrow {
+    animation-delay: 0s;
+}
+.bottom-arrow {
+    animation-delay: 0.6s;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-6px); }
+}
